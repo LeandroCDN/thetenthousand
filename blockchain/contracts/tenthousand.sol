@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0 <0.9.0;
 
+/*/TODO:
+* add ownable library
+* Function play add payable sistem
+*/
+
 interface IRadom{
     function rand(address _user) external view returns(uint256);
     function randrange(uint a, uint b,address _user) external view returns(uint);
@@ -18,15 +23,19 @@ contract factoryTenThoushand {
 contract tenthousand {
     IRadom randomContract;
     uint public maxNumber = 10000;
+    uint public lastResult;
     address public owner;
 
+    uint playPrice;
+    uint basePrice;
+
     constructor(address _owner) {
-        owner= _owner;        
+        owner= _owner;
     }
 
     function play(uint _number) public returns(bool){
-        uint result = randomContract.randrange(0, maxNumber, msg.sender);
-        if(result  == _number){
+        lastResult = randomContract.randrange(0, maxNumber, msg.sender);
+        if(lastResult  == _number){
             maxNumber = 10000;
             return true;
         }else{
@@ -40,4 +49,16 @@ contract tenthousand {
         randomContract = IRadom(_randomContract);
     } 
 
+    function calculatePricePerPlay()public view returns(uint){
+        uint balance = address(msg.sender).balance;
+        if (balance > maxNumber){
+            return (balance / maxNumber)+basePrice;
+        }
+        return basePrice; 
+    }
+
+    
+    function setBasePrice(uint _newBasePrice) public /*onlyOwner*/{
+       basePrice =_newBasePrice;
+    }
 }
