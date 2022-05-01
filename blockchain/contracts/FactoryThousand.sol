@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0 <0.9.0;
 
+//import "./thenthousand.sol"
 /*/TODO:
 * add ownable library
 * Function play add payable sistem
@@ -9,6 +10,7 @@ pragma solidity >=0.7.0 <0.9.0;
 interface IRadom{
     function rand(address _user) external view returns(uint256);
     function randrange(uint a, uint b,address _user) external view returns(uint);
+    function randWhitSignature(uint min, uint max, address _user, uint _randSigner) external view returns(uint);
 }
 
 contract factoryTenThoushand {
